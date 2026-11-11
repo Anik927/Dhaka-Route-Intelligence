@@ -1,98 +1,226 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+
+import { useAuth } from "../../context/AuthContext";
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const { user, isAuthenticated } = useAuth();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  if (!isAuthenticated || !user) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Please Login</Text>
+      </View>
+    );
+  }
+
+  // Role-based dashboard content
+  const renderDashboard = () => {
+    switch (user.role) {
+      case "user":
+        return (
+          <>
+            <Text style={styles.sectionTitle}>
+              Citizen Dashboard
+            </Text>
+
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>
+                Report Road Problems
+              </Text>
+              <Text style={styles.cardDescription}>
+                Report potholes, road damage, waterlogging,
+                accidents, and traffic problems.
+              </Text>
+            </View>
+
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>
+                My Contributions
+              </Text>
+              <Text style={styles.cardDescription}>
+                View and track the reports you have submitted.
+              </Text>
+            </View>
+
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>
+                Trust Level
+              </Text>
+              <Text style={styles.cardDescription}>
+                Your contribution and trust score will grow
+                as your reports are verified.
+              </Text>
+            </View>
+          </>
+        );
+
+      case "moderator":
+        return (
+          <>
+            <Text style={styles.sectionTitle}>
+              Moderator Dashboard
+            </Text>
+
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>
+                Review Reports
+              </Text>
+              <Text style={styles.cardDescription}>
+                Review submitted road reports and check
+                their accuracy.
+              </Text>
+            </View>
+
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>
+                Verify Reports
+              </Text>
+              <Text style={styles.cardDescription}>
+                Verify valid reports or reject inaccurate
+                submissions.
+              </Text>
+            </View>
+          </>
+        );
+
+      case "admin":
+        return (
+          <>
+            <Text style={styles.sectionTitle}>
+              Admin Dashboard
+            </Text>
+
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>
+                User Management
+              </Text>
+              <Text style={styles.cardDescription}>
+                Manage user accounts and roles.
+              </Text>
+            </View>
+
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>
+                Report Management
+              </Text>
+              <Text style={styles.cardDescription}>
+                Monitor reports and their verification status.
+              </Text>
+            </View>
+
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>
+                System Overview
+              </Text>
+              <Text style={styles.cardDescription}>
+                View overall platform activity and contributions.
+              </Text>
+            </View>
+          </>
+        );
+
+      default:
+        return (
+          <Text style={styles.cardDescription}>
+            No dashboard available for this role.
+          </Text>
+        );
+    }
+  };
+
+  return (
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+    >
+      <Text style={styles.appName}>
+        Dhaka Route Intelligence
+      </Text>
+
+      <View style={styles.welcomeCard}>
+        <Text style={styles.welcomeText}>
+          Welcome, {user.name}!
+        </Text>
+
+        <Text style={styles.email}>
+          {user.email}
+        </Text>
+
+        <Text style={styles.role}>
+          Role: {user.role.toUpperCase()}
+        </Text>
+      </View>
+
+      {renderDashboard()}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: "#F1F5F9",
   },
-  stepContainer: {
-    gap: 8,
+  content: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+  appName: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#0F172A",
+    marginBottom: 20,
+  },
+  welcomeCard: {
+    backgroundColor: "#0F766E",
+    padding: 22,
+    borderRadius: 15,
+    marginBottom: 25,
+  },
+  welcomeText: {
+    fontSize: 21,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+  },
+  email: {
+    fontSize: 14,
+    color: "#CCFBF1",
+    marginTop: 7,
+  },
+  role: {
+    fontSize: 13,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    marginTop: 12,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#0F172A",
+    marginBottom: 15,
+  },
+  card: {
+    backgroundColor: "#FFFFFF",
+    padding: 18,
+    borderRadius: 13,
+    marginBottom: 14,
+    elevation: 2,
+  },
+  cardTitle: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "#0F766E",
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  cardDescription: {
+    fontSize: 14,
+    color: "#64748B",
+    lineHeight: 21,
   },
 });

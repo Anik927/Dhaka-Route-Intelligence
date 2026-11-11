@@ -1,24 +1,56 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Stack } from "expo-router";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+} from "react-native";
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+import {
+  AuthProvider,
+  useAuth,
+} from "../context/AuthContext";
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+// Root navigation
+function RootNavigator() {
+  const { isLoading } = useAuth();
+
+  // Wait until AsyncStorage session restoration finishes
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0F766E" />
+      </View>
+    );
+  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="(auth)" />
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen
+        name="modal"
+        options={{ presentation: "modal" }}
+      />
+    </Stack>
   );
 }
+
+// Root Layout
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <RootNavigator />
+    </AuthProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F1F5F9",
+  },
+});
