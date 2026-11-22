@@ -84,7 +84,7 @@ export default function ReportDetailScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Report details" }} />
+      <Stack.Screen options={{ title: "Report details", headerShown: true }} />
       {loading ? (
         <ActivityIndicator style={{ marginTop: 60 }} />
       ) : error || !report ? (
