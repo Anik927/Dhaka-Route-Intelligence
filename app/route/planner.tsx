@@ -1,6 +1,6 @@
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
 import { transportModes } from "../../constants/transportModes";
 
 export default function RoutePlannerScreen() {
@@ -18,7 +18,10 @@ export default function RoutePlannerScreen() {
       return;
     }
     setError("");
-    router.push("/route/results");
+    router.push({
+      pathname: "/route/results",
+      params: { origin, destination, mode: selectedMode.id },
+    });
   }
 
   return (
