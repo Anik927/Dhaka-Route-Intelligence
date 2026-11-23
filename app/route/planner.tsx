@@ -1,7 +1,9 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import RoadMap from "../../components/map/RoadMap";
 import { transportModes } from "../../constants/transportModes";
+import { DEFAULT_CENTER } from "../../utils/helpers";
 
 export default function RoutePlannerScreen() {
   const router = useRouter();
@@ -28,10 +30,16 @@ export default function RoutePlannerScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Plan your route</Text>
 
-      <View style={styles.mapPlaceholder}>
-        <Text>Map goes here (pin start and destination)</Text>
-      </View>
-
+      <RoadMap
+  style={styles.map}
+  reports={[]}
+  initialRegion={{
+    latitude: DEFAULT_CENTER.latitude,
+    longitude: DEFAULT_CENTER.longitude,
+    latitudeDelta: 0.08,
+    longitudeDelta: 0.08,
+  }}
+/>
       <TextInput
         style={styles.input}
         placeholder="Start location (e.g. Kafrul)"
@@ -66,14 +74,7 @@ export default function RoutePlannerScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#f5f5f5" },
   title: { fontSize: 20, fontWeight: "bold", marginBottom: 12 },
-  mapPlaceholder: {
-    height: 160,
-    backgroundColor: "#ddd",
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 12,
-  },
+  map: { height: 160, borderRadius: 10, overflow: "hidden", marginBottom: 12, flex: 0 },
   input: {
     backgroundColor: "#fff",
     borderRadius: 10,
