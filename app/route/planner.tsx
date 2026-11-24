@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import RoadMap from "../../components/map/RoadMap";
@@ -28,18 +28,20 @@ export default function RoutePlannerScreen() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ title: "Plan route", headerShown: true }} />
       <Text style={styles.title}>Plan your route</Text>
 
+
       <RoadMap
-  style={styles.map}
-  reports={[]}
-  initialRegion={{
-    latitude: DEFAULT_CENTER.latitude,
-    longitude: DEFAULT_CENTER.longitude,
-    latitudeDelta: 0.08,
-    longitudeDelta: 0.08,
-  }}
-/>
+        style={styles.map}
+        reports={[]}
+        initialRegion={{
+          latitude: DEFAULT_CENTER.latitude,
+          longitude: DEFAULT_CENTER.longitude,
+          latitudeDelta: 0.08,
+          longitudeDelta: 0.08,
+        }}
+      />
       <TextInput
         style={styles.input}
         placeholder="Start location (e.g. Kafrul)"

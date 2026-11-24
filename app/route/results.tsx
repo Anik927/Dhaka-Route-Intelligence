@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import RouteCard from "../../components/route/RouteCard";
 import type { RouteOption } from "../../constants/mockRoutes";
 import { getRouteOptions } from "../../services/routeService";
@@ -49,6 +49,7 @@ export default function RouteResultsScreen() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ title: "Route results", headerShown: true }} />
       <Text style={styles.trip}>{origin} to {destination}</Text>
       <View style={styles.mapPlaceholder}>
         <Text>Map placeholder: showing {selectedRoute?.name}</Text>

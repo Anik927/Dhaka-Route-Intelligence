@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { transportModes } from "../../constants/transportModes";
 
@@ -8,6 +8,7 @@ export default function TransportModeScreen() {
 
   return (
     <View style={styles.container}>
+       <Stack.Screen options={{ title: "Transport mode", headerShown: true }} />
       <Text style={styles.title}>Choose transport mode</Text>
 
       {transportModes.map((item) => (

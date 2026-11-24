@@ -19,6 +19,6 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, justifyContent: "center", backgroundColor: "#f5f5f5" },
   title: { fontSize: 22, fontWeight: "700", marginBottom: 8 },
   note: { fontSize: 14, color: "#666", marginBottom: 16 },
-  button: { backgroundColor: "#1565c0", borderRadius: 10, padding: 14, alignItems: "center" },
+  button: { backgroundColor: "#0f766e", borderRadius: 10, padding: 14, alignItems: "center" },
   buttonText: { color: "#fff", fontWeight: "bold" },
 });

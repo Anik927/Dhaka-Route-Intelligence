@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import { mockRoutes } from "../../constants/mockRoutes";
 
 export default function RouteDetailsScreen() {
@@ -16,6 +16,7 @@ export default function RouteDetailsScreen() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ title: "Route details", headerShown: true }} />
       <Text style={styles.title}>{route.name}</Text>
 
       <View style={styles.mapPlaceholder}>
