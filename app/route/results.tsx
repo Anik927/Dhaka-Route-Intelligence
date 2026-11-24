@@ -1,9 +1,11 @@
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+
 import RouteCard from "../../components/route/RouteCard";
 import type { RouteOption } from "../../constants/mockRoutes";
 import { getRouteOptions } from "../../services/routeService";
+import RouteMap from "../../components/map/RouteMap";
 
 export default function RouteResultsScreen() {
   const router = useRouter();
@@ -36,12 +38,22 @@ export default function RouteResultsScreen() {
     load();
   }, [load]);
 
-  if (loading) return <ActivityIndicator style={{ marginTop: 60 }} />;
+  if (loading) {
+    return (
+      <>
+        <Stack.Screen options={{ title: "Route results", headerShown: true }} />
+        <ActivityIndicator style={{ marginTop: 60 }} />
+      </>
+    );
+  }
   if (error) {
     return (
-      <TouchableOpacity onPress={load} style={{ marginTop: 60 }}>
-        <Text style={styles.errorText}>{error} Tap to retry.</Text>
-      </TouchableOpacity>
+      <>
+        <Stack.Screen options={{ title: "Route results", headerShown: true }} />
+        <TouchableOpacity onPress={load} style={{ marginTop: 60 }}>
+          <Text style={styles.errorText}>{error} Tap to retry.</Text>
+        </TouchableOpacity>
+      </>
     );
   }
 
@@ -51,9 +63,8 @@ export default function RouteResultsScreen() {
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Route results", headerShown: true }} />
       <Text style={styles.trip}>{origin} to {destination}</Text>
-      <View style={styles.mapPlaceholder}>
-        <Text>Map placeholder: showing {selectedRoute?.name}</Text>
-      </View>
+      <RouteMap route={selectedRoute} style={styles.map} />
+      <Text style={styles.showing}>Showing: {selectedRoute?.name}</Text>
 
       <FlatList
         data={routes}
@@ -78,7 +89,8 @@ export default function RouteResultsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#f5f5f5" },
   trip: { fontSize: 16, fontWeight: "600", marginBottom: 8 },
-  mapPlaceholder: { height: 200, backgroundColor: "#ddd", borderRadius: 10, alignItems: "center", justifyContent: "center", marginBottom: 12 },
+  map: { height: 200, borderRadius: 10, overflow: "hidden", marginBottom: 6, flex: 0 },
+  showing: { fontSize: 12, color: "#666", marginBottom: 10 },
   errorText: { color: "#c62828", textAlign: "center" },
   primaryButton: { backgroundColor: "#1565c0", borderRadius: 10, padding: 14, alignItems: "center" },
   primaryButtonText: { color: "#fff", fontWeight: "bold" },
