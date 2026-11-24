@@ -5,7 +5,7 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View }
 import RouteCard from "../../components/route/RouteCard";
 import type { RouteOption } from "../../constants/mockRoutes";
 import { getRouteOptions } from "../../services/routeService";
-import RouteMap from "../../components/map/RouteMap";
+import RouteMap from "../../components/route/RouteMap";
 
 export default function RouteResultsScreen() {
   const router = useRouter();

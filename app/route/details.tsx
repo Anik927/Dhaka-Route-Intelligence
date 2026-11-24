@@ -1,6 +1,6 @@
-import RouteMap from "../../components/map/RouteMap";
-import { StyleSheet, Text, View } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
+import RouteMap from "../../components/route/RouteMap";
 import { mockRoutes } from "../../constants/mockRoutes";
 
 export default function RouteDetailsScreen() {
